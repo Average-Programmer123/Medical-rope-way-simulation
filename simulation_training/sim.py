@@ -113,7 +113,7 @@ class DataAnalyze:
         self.sim = sim
     def scale(self, var):
         var=np.array(var)
-        return (var[-1]-np.mean(var))/np.std(var) if np.std(var) != 0 else 0
+        return (var[-1]-np.mean(var))/np.std(var) if np.std(var)!=0 else 0
 
     def new_features(self):
         s = self.sim.state
@@ -123,7 +123,7 @@ class DataAnalyze:
 
     def save(self, csv):
         df = pd.DataFrame(self.sim.state)
-        df.to_csv(csv, index=False, header=True, mode='a')
+        df.to_csv(csv, index=False, header=True, mode='a') #make the header param false after the first test
 def main():
     pygame.init()
     WIDTH, HEIGHT = 1000, 600
@@ -165,13 +165,16 @@ def main():
                     sim.state["motor_force"] += 10
         sim.step()
         sim.changeInWind(np.random.uniform(0, 5), np.random.uniform(-5, 0))
+        #i know this is not the best solution but it is fine for now
         mass2=sim2.scale(sim.state["mass"])
         angle2=sim2.scale(sim.state["angles"])
         angular_velocity2=sim2.scale(sim.state["angular_array"])
         drag2=sim2.scale(sim.state["drag_"])
         winds2=sim2.scale(sim.state["winds"])
         speeds2=sim2.scale(sim.state["speeds"])
+        
         pred=model.predict([[mass2, angle2, speeds2, winds2, angular_velocity2, drag2]])
+        
         if pred==1:
             sim.state["motor_force"] -= 10
         elif pred==0:
@@ -223,9 +226,8 @@ def main():
         pygame.display.flip()
         clock.tick(FPS)
     pygame.quit()
-    # sim2.new_features()
-    # sim2.save("physics.csv")
-
-
+    #if you still need to add data to csv file then put this else comment it
+    sim2.new_features()
+    sim2.save("physics.csv")
 if __name__ == "__main__":
     main()
