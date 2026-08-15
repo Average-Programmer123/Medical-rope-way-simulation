@@ -67,13 +67,13 @@ X_test = scaler.transform(X_test_raw)
 # plt.legend(title="True Threshold Labels", loc='upper right')
 # plt.show()
 
-# model = RandomForestClassifier(n_estimators=15, max_depth=8, random_state=42,
-#                                class_weight="balanced",
-#                                min_samples_leaf=5,
-#                                n_jobs=-1
-#                                )
-# model.fit(X_train, y_train)
-# joblib.dump(model, "braking_model.pkl")
+model = RandomForestClassifier(n_estimators=15, max_depth=8, random_state=42,
+                               class_weight="balanced",
+                               min_samples_leaf=5,
+                               n_jobs=-1
+                               )
+model.fit(X_train, y_train)
+joblib.dump(model, "braking_model.pkl")
 
 #test
 
